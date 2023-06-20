@@ -24,6 +24,10 @@ public class Controller : MonoBehaviour
         {
             Attack();
         }
+        if (Input.GetMouseButtonDown(1))
+        {
+            Block();
+        }
     }
     void FixedUpdate()
     {
@@ -56,26 +60,35 @@ public class Controller : MonoBehaviour
     }
     void Attack()
     {
+        string currentPlayingAnimation = GetCurrentAnimationName();
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackDistance, enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
         {
             enemy.GetComponent<Enemy>().GetHit();
         }
-        if ((latestAttackType == 0 || latestAttackType == 3) && !anim.GetCurrentAnimatorStateInfo(0).IsName("Attack3"))
+        if ((latestAttackType == 0 || latestAttackType == 3) && currentPlayingAnimation != "Attack3")
         {
             anim.SetTrigger("attack1");
             latestAttackType = 1;
         }
-        else if (latestAttackType == 1 && !anim.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
+        else if (latestAttackType == 1 && currentPlayingAnimation != "Attack1")
         {
             anim.SetTrigger("attack2");
             latestAttackType = 2;
         }
-        else if (latestAttackType == 2 && !anim.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
+        else if (latestAttackType == 2 && currentPlayingAnimation != "Attack2")
         {
             anim.SetTrigger("attack3");
             latestAttackType = 3;
         }
+    }
+    void Block()
+    {
+
+    }
+    string GetCurrentAnimationName()
+    {
+        return anim.GetCurrentAnimatorClipInfo(0)[0].clip.name;
     }
     void OnDrawGizmos()
     {

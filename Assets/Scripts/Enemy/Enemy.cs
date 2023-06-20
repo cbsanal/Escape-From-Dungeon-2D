@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Animator anim;
+    int health = 100;
+    Camera cam;
     void Start()
     {
-
+        anim = GetComponent<Animator>();
+        cam = FindObjectOfType<Camera>();
     }
 
     // Update is called once per frame
@@ -17,6 +20,12 @@ public class Enemy : MonoBehaviour
     }
     public void GetHit()
     {
-        Destroy(gameObject);
+        health -= 20;
+        anim.SetTrigger("GetHit");
+        cam.StartShaking(5f, 0.5f);
+        if (health <= 0)
+        {
+            anim.SetTrigger("Dead");
+        }
     }
 }
