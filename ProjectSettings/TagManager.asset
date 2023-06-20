@@ -13,8 +13,8 @@ TagManager:
   - UI
   - Decorative
   - Background
-  - Characters
-  - 
+  - Player
+  - Enemy
   - 
   - 
   - 
@@ -50,6 +50,9 @@ TagManager:
   - name: Main
     uniqueID: 1753685223
     locked: 0
-  - name: Characters
+  - name: Enemy
+    uniqueID: 3824831727
+    locked: 0
+  - name: Player
     uniqueID: 2849249833
     locked: 0
