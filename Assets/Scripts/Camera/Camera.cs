@@ -19,6 +19,7 @@ public class Camera : MonoBehaviour
     }
     public void StartShaking(float intensity, float time)
     {
+        CancelInvoke(nameof(StopShaking));
         perlin.m_AmplitudeGain = intensity;
         Invoke(nameof(StopShaking), time);
     }
