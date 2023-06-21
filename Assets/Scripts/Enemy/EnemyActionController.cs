@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class EnemyActionController : MonoBehaviour
 {
     Animator anim;
     Rigidbody2D rb;
-    int health = 100;
-    Camera cam;
+    public int health, damage, speed;
     [SerializeField] int knockBackX, knockBackY;
     [SerializeField] Transform player;
 
@@ -15,15 +14,11 @@ public class Enemy : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        cam = FindObjectOfType<Camera>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-
-    }
-    public void GetHit()
+    void Update() { }
+    public void GetHit(int damageValue)
     {
         if (player.position.x < transform.position.x)
         {
@@ -33,14 +28,13 @@ public class Enemy : MonoBehaviour
         {
             rb.AddForce(new Vector2(-knockBackX, knockBackY), ForceMode2D.Force);
         }
-        health -= 20;
+        health -= damageValue;
         anim.SetTrigger("GetHit");
-        cam.StartShaking(3f, 0.75f);
         if (health <= 0)
         {
             anim.SetTrigger("Dead");
-            // GetComponent<Collider2D>().isTrigger = true;
-            // Invoke(Destroy, 5);
+            rb.bodyType = RigidbodyType2D.Static;
+            Destroy(GetComponent<BoxCollider2D>());
         }
     }
 }

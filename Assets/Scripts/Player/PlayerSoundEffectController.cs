@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundAction : MonoBehaviour
+public class PlayerSoundEffectController : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] AudioSource attack1Source, attack2Source, attack3Source;
