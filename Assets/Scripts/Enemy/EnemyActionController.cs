@@ -7,13 +7,14 @@ public class EnemyActionController : MonoBehaviour
     Animator anim;
     Rigidbody2D rb;
     public int health, damage, speed;
+    Transform player;
     [SerializeField] int knockBackX, knockBackY;
-    [SerializeField] Transform player;
 
     void Start()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
     // Update is called once per frame

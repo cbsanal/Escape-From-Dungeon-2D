@@ -9,14 +9,22 @@ public class PlayerActionController : MonoBehaviour
     int latestAttackType = 3; // So that attack1 will be triggered first
     Rigidbody2D rb;
     Animator anim;
+    GameObject[] enemies;
     [SerializeField] float speed;
-    [SerializeField] Collider2D enemyHitBox;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), enemyHitBox);
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            Collider2D enemyCollider = enemy.GetComponent<Collider2D>();
+            if (enemyCollider)
+            {
+                Physics2D.IgnoreCollision(GetComponent<Collider2D>(), enemyCollider);
+            }
+        }
     }
     void Update()
     {
