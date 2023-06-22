@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerSoundEffectController : MonoBehaviour
 {
-    // Start is called before the first frame update
     [SerializeField] AudioSource attack1Source, attack2Source, attack3Source;
     public void PlaySound(string animationName)
     {

@@ -8,7 +8,7 @@ public class CameraActionController : MonoBehaviour
     CinemachineVirtualCamera cam;
     CinemachineBasicMultiChannelPerlin perlin;
     [SerializeField] float intensity, time;
-    void Start()
+    void Awake()
     {
         cam = GetComponent<CinemachineVirtualCamera>();
         perlin = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();

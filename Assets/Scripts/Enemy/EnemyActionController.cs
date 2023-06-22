@@ -10,25 +10,24 @@ public class EnemyActionController : MonoBehaviour
     Transform player;
     [SerializeField] int knockBackX, knockBackY;
 
-    void Start()
+    void Awake()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        player = GameObject.FindWithTag("Player").GetComponent<Transform>();
     }
-
-    // Update is called once per frame
-    void Update() { }
-    public void GetHit(int damageValue)
+    void Start()
     {
-        if (player.position.x < transform.position.x)
-        {
-            rb.AddForce(new Vector2(knockBackX, knockBackY), ForceMode2D.Force);
-        }
-        else
-        {
-            rb.AddForce(new Vector2(-knockBackX, knockBackY), ForceMode2D.Force);
-        }
+        // player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+    }
+    void Update() { }
+    void FixedUpdate()
+    {
+        Attack();
+    }
+    public void GetHit(int damageValue, bool isEnemyFacingRight)
+    {
+        rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX : -knockBackX, knockBackY), ForceMode2D.Force);
         health -= damageValue;
         anim.SetTrigger("GetHit");
         if (health <= 0)
@@ -37,5 +36,9 @@ public class EnemyActionController : MonoBehaviour
             rb.bodyType = RigidbodyType2D.Static;
             Destroy(GetComponent<BoxCollider2D>());
         }
+    }
+    void Attack()
+    {
+        anim.SetTrigger("Attack1");
     }
 }
