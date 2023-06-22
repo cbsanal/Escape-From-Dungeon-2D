@@ -5,12 +5,13 @@ using UnityEngine;
 public class PlayerActionController : MonoBehaviour
 {
     float direction;
-    bool facingRight = true, isRunning = false, isRolling = false, isBlocking = false;
+    bool facingRight = true, isRunning = false;
+    bool isRolling = false, isRollingAnimationPlaying = false, isBlocking = false;
     int latestAttackType = 3, health = 100; // So that attack1 will be triggered first
     Rigidbody2D rb;
     Animator anim;
     GameObject[] enemies;
-    [SerializeField] float speed;
+    [SerializeField] float speed, rollDistance;
     [SerializeField] int knockBackX, knockBackY;
 
 
@@ -80,6 +81,7 @@ public class PlayerActionController : MonoBehaviour
     {
         if (facingRight && direction < 0 || !facingRight && direction > 0)
         {
+            // GetComponent<SpriteRenderer>().flipX = facingRight;
             facingRight = !facingRight;
             Vector3 currentScale = transform.localScale;
             currentScale.x *= -1;
@@ -109,30 +111,36 @@ public class PlayerActionController : MonoBehaviour
     {
         if (isRolling)
         {
+            rb.velocity = new Vector2(facingRight ? speed : -speed, rb.velocity.y);
+        }
+        if (isRolling && !isRollingAnimationPlaying)
+        {
+            isRollingAnimationPlaying = true;
             anim.SetTrigger("Roll");
-            rb.AddForce(new Vector2(5000, transform.position.y), ForceMode2D.Force);
-            isRolling = false;
         }
     }
     public void GetHit(int damage, bool isEnemyFacingRight)
     {
-        health -= 20;
-        if (health <= 0)
+        if (!isRolling)
         {
-            anim.SetTrigger("Dead");
-            rb.bodyType = RigidbodyType2D.Static;
-            Destroy(GetComponent<BoxCollider2D>());
-            GetComponent<PlayerActionController>().enabled = false;
-        }
-        if (isBlocking)
-        {
-            anim.SetBool("IsBlockShaking", true);
-            rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX / 2 : -knockBackX / 2, knockBackY / 2), ForceMode2D.Force);
-        }
-        else
-        {
-            anim.SetTrigger("GetHit");
-            rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX : -knockBackX, knockBackY), ForceMode2D.Force);
+            health -= 20;
+            if (health <= 0)
+            {
+                anim.SetTrigger("Dead");
+                rb.bodyType = RigidbodyType2D.Static;
+                Destroy(GetComponent<BoxCollider2D>());
+                GetComponent<PlayerActionController>().enabled = false;
+            }
+            if (isBlocking)
+            {
+                anim.SetBool("IsBlockShaking", true);
+                rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX / 2 : -knockBackX / 2, knockBackY / 2), ForceMode2D.Force);
+            }
+            else
+            {
+                anim.SetTrigger("GetHit");
+                rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX : -knockBackX, knockBackY), ForceMode2D.Force);
+            }
         }
     }
     void Block()
@@ -149,5 +157,12 @@ public class PlayerActionController : MonoBehaviour
     public void StopBlockShaking()
     {
         anim.SetBool("IsBlockShaking", false);
+    }
+    public void StopRolling()
+    {
+        isRollingAnimationPlaying = false;
+        isRolling = false;
+        // For preventing player slipping after roll
+        rb.velocity = new Vector2(0, rb.velocity.y);
     }
 }
