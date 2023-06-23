@@ -1,25 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerActionController : MonoBehaviour
 {
     float direction;
     bool facingRight = true, isRunning = false;
     bool isRolling = false, isRollingAnimationPlaying = false, isBlocking = false;
-    int latestAttackType = 3, health = 100; // latestAttackType = 3 so that attack1 will be triggered first
+    int latestAttackType = 3, currentHealth, maxHealth = 100; // latestAttackType = 3 so that attack1 will be triggered first
     Rigidbody2D rb;
     Animator anim;
     GameObject[] enemies;
     [SerializeField] float speed, rollDistance;
     [SerializeField] int knockBackX, knockBackY;
-
+    [SerializeField] Image healthBar;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        currentHealth = maxHealth;
     }
     void Start()
     {
@@ -132,13 +134,14 @@ public class PlayerActionController : MonoBehaviour
                 anim.SetBool("IsBlockShaking", true);
                 rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX / 2 : -knockBackX / 2, knockBackY / 2), ForceMode2D.Force);
             }
-            else
+            if (!isBlocking || (isBlocking && facingRight == isEnemyFacingRight))
             {
-                health -= 20;
+                currentHealth -= 20;
+                healthBar.fillAmount = (float)currentHealth / maxHealth;
                 anim.SetTrigger("GetHit");
                 rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX : -knockBackX, knockBackY), ForceMode2D.Force);
             }
-            if (health <= 0)
+            if (currentHealth <= 0)
             {
                 anim.SetTrigger("Dead");
                 rb.bodyType = RigidbodyType2D.Static;
