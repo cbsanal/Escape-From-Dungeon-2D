@@ -7,7 +7,7 @@ public class PlayerActionController : MonoBehaviour
     float direction;
     bool facingRight = true, isRunning = false;
     bool isRolling = false, isRollingAnimationPlaying = false, isBlocking = false;
-    int latestAttackType = 3, health = 100; // So that attack1 will be triggered first
+    int latestAttackType = 3, health = 100; // latestAttackType = 3 so that attack1 will be triggered first
     Rigidbody2D rb;
     Animator anim;
     GameObject[] enemies;
@@ -21,7 +21,6 @@ public class PlayerActionController : MonoBehaviour
         anim = GetComponent<Animator>();
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
     }
-
     void Start()
     {
         foreach (GameObject enemy in enemies)
@@ -36,6 +35,7 @@ public class PlayerActionController : MonoBehaviour
     void Update()
     {
         direction = Input.GetAxisRaw("Horizontal");
+        Flip();
         if (Input.GetMouseButtonDown(0))
         {
             Attack();
@@ -55,26 +55,29 @@ public class PlayerActionController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        Flip();
         Run();
         Roll();
     }
     void Run()
     {
-        if (isRunning)
+        if (!isBlocking)
         {
-            rb.velocity = new Vector2(direction * speed, rb.velocity.y);
-        }
-        if (!isRunning && (direction > 0 || direction < 0))
-        {
-            isRunning = true;
-            anim.SetBool("IsRunning", isRunning);
-        }
-        else if (isRunning && direction == 0)
-        {
-            rb.velocity = new Vector2(direction * speed, rb.velocity.y);
-            isRunning = false;
-            anim.SetBool("IsRunning", isRunning);
+
+            if (isRunning)
+            {
+                rb.velocity = new Vector2(direction * speed, rb.velocity.y);
+            }
+            if (!isRunning && (direction > 0 || direction < 0))
+            {
+                isRunning = true;
+                anim.SetBool("IsRunning", isRunning);
+            }
+            else if (isRunning && direction == 0)
+            {
+                rb.velocity = new Vector2(direction * speed, rb.velocity.y);
+                isRunning = false;
+                anim.SetBool("IsRunning", isRunning);
+            }
         }
     }
     void Flip()
@@ -123,7 +126,18 @@ public class PlayerActionController : MonoBehaviour
     {
         if (!isRolling)
         {
-            health -= 20;
+            if (isBlocking)
+            {
+                anim.SetTrigger("BlockShaking");
+                anim.SetBool("IsBlockShaking", true);
+                rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX / 2 : -knockBackX / 2, knockBackY / 2), ForceMode2D.Force);
+            }
+            else
+            {
+                health -= 20;
+                anim.SetTrigger("GetHit");
+                rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX : -knockBackX, knockBackY), ForceMode2D.Force);
+            }
             if (health <= 0)
             {
                 anim.SetTrigger("Dead");
@@ -131,20 +145,12 @@ public class PlayerActionController : MonoBehaviour
                 Destroy(GetComponent<BoxCollider2D>());
                 GetComponent<PlayerActionController>().enabled = false;
             }
-            if (isBlocking)
-            {
-                anim.SetBool("IsBlockShaking", true);
-                rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX / 2 : -knockBackX / 2, knockBackY / 2), ForceMode2D.Force);
-            }
-            else
-            {
-                anim.SetTrigger("GetHit");
-                rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX : -knockBackX, knockBackY), ForceMode2D.Force);
-            }
+
         }
     }
     void Block()
     {
+        FreezePlayer();
         anim.SetBool("IsBlocking", true);
         isBlocking = true;
     }
@@ -154,15 +160,14 @@ public class PlayerActionController : MonoBehaviour
         anim.SetBool("IsBlockShaking", false);
         isBlocking = false;
     }
-    public void StopBlockShaking()
-    {
-        anim.SetBool("IsBlockShaking", false);
-    }
     public void StopRolling()
     {
+        FreezePlayer();
         isRollingAnimationPlaying = false;
         isRolling = false;
-        // For preventing player slipping after roll
+    }
+    void FreezePlayer()
+    {
         rb.velocity = new Vector2(0, rb.velocity.y);
     }
 }

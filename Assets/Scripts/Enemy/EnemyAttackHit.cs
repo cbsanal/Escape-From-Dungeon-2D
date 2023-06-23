@@ -4,16 +4,10 @@ using UnityEngine;
 
 public class EnemyAttackHit : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    PlayerActionController player;
+    void Awake()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        player = GameObject.FindWithTag("Player").GetComponent<PlayerActionController>();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -22,7 +16,7 @@ public class EnemyAttackHit : MonoBehaviour
         {
             bool isAttackRotationRight = transform.parent.transform.position.x < other.transform.position.x;
             // string currentPlayingAnimation = CommonUtils.GetCurrentAnimationName(anim);
-            other.GetComponent<PlayerActionController>().GetHit(20, isAttackRotationRight);
+            player.GetHit(20, isAttackRotationRight);
             // soundController.PlaySound(currentPlayingAnimation);
             // cam.StartShaking();
         }
