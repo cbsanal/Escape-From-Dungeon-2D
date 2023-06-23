@@ -12,7 +12,7 @@ public class PlayerActionController : MonoBehaviour
     Rigidbody2D rb;
     Animator anim;
     GameObject[] enemies;
-    [SerializeField] float speed, rollDistance;
+    [SerializeField] float movementSpeed, rollDistance;
     [SerializeField] int knockBackX, knockBackY;
     [SerializeField] Image healthBar;
 
@@ -67,7 +67,7 @@ public class PlayerActionController : MonoBehaviour
 
             if (isRunning)
             {
-                rb.velocity = new Vector2(direction * speed, rb.velocity.y);
+                rb.velocity = new Vector2(direction * movementSpeed, rb.velocity.y);
             }
             if (!isRunning && (direction > 0 || direction < 0))
             {
@@ -76,7 +76,7 @@ public class PlayerActionController : MonoBehaviour
             }
             else if (isRunning && direction == 0)
             {
-                rb.velocity = new Vector2(direction * speed, rb.velocity.y);
+                rb.velocity = new Vector2(direction, rb.velocity.y);
                 isRunning = false;
                 anim.SetBool("IsRunning", isRunning);
             }
@@ -116,7 +116,7 @@ public class PlayerActionController : MonoBehaviour
     {
         if (isRolling)
         {
-            rb.velocity = new Vector2(facingRight ? speed : -speed, rb.velocity.y);
+            rb.velocity = new Vector2(facingRight ? movementSpeed : -movementSpeed, rb.velocity.y);
         }
         if (isRolling && !isRollingAnimationPlaying)
         {

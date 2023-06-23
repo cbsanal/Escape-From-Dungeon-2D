@@ -259,7 +259,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   damage: 20
-  speed: 20
+  movementSpeed: 0
+  isWalking: 0
+  isWalkingAnimationPlaying: 0
   knockBackX: 125
   knockBackY: 100
 --- !u!50 &83122251
@@ -458,7 +460,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260952138}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.10645056, y: 2.0222063, z: -10}
+  m_LocalPosition: {x: -1.6679609, y: 2.0222063, z: -10}
   m_LocalScale: {x: 1, y: 1.32, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4452,7 +4454,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 150
   damage: 20
-  speed: 10
+  movementSpeed: 0
+  isWalking: 0
+  isWalkingAnimationPlaying: 0
   knockBackX: 75
   knockBackY: 75
 --- !u!1 &442169001
@@ -4630,7 +4634,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 571468422}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.82, y: -3.12, z: 0}
+  m_LocalPosition: {x: -4.21, y: -3.12, z: 0}
   m_LocalScale: {x: 1.7848, y: 1.9737, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4698,7 +4702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120f074d3012ee9439b7e2b5451822d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 12
+  movementSpeed: 12
   rollDistance: 30
   knockBackX: 125
   knockBackY: 100
@@ -5564,7 +5568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad980451443d70438faac0bc6c235a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TrackedObjectOffset: {x: 2.4842257, y: 0, z: 0}
+  m_TrackedObjectOffset: {x: 0.980677, y: 0, z: 0}
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
@@ -5572,7 +5576,7 @@ MonoBehaviour:
   m_YDamping: 0
   m_ZDamping: 0
   m_TargetMovementOnly: 1
-  m_ScreenX: 0.289
+  m_ScreenX: 0.437
   m_ScreenY: 0.869
   m_CameraDistance: 10
   m_DeadZoneWidth: 0
@@ -5581,7 +5585,7 @@ MonoBehaviour:
   m_UnlimitedSoftZone: 0
   m_SoftZoneWidth: 1.555
   m_SoftZoneHeight: 1.782
-  m_BiasX: 0
+  m_BiasX: -0.000000019165482
   m_BiasY: 0
   m_CenterOnActivate: 1
   m_GroupFramingMode: 2
@@ -5984,7 +5988,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1832502455}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.10645056, y: 2.0222063, z: -10}
+  m_LocalPosition: {x: -1.6679609, y: 2.0222063, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13855,7 +13859,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2015078859}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.083, y: -0.867, z: 0}
+  m_LocalPosition: {x: 5.48, y: -0.867, z: 0}
   m_LocalScale: {x: -5.7099075, y: 4.4463787, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13936,7 +13940,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   damage: 0
-  speed: 0
+  movementSpeed: 5
+  isWalking: 1
+  isWalkingAnimationPlaying: 0
   knockBackX: 125
   knockBackY: 100
 --- !u!1 &2031502674
@@ -14001,7 +14007,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 6cdf2b6afcdf03c4fb959f056819ba48, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.35
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -14097,7 +14103,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: b0c1abd0649fdfd428d028574a0805fe, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.35
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -14193,7 +14199,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 594c4d362d2ee664e91397fd725b3b3f, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.35
   m_Pitch: 1
   Loop: 0
   Mute: 0
