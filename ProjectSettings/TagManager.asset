@@ -6,6 +6,8 @@ TagManager:
   tags:
   - CinemachineCamera
   - Enemy
+  - PlayerHealthBar
+  - EnemyHealthBar
   layers:
   - Default
   - TransparentFX

@@ -14,13 +14,15 @@ public class PlayerActionController : MonoBehaviour
     GameObject[] enemies;
     [SerializeField] float movementSpeed, rollDistance;
     [SerializeField] int knockBackX, knockBackY;
-    [SerializeField] Image healthBar;
+    Image healthBar;
+    [SerializeField] PlayerSoundEffectController soundController;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        healthBar = GameObject.FindWithTag("PlayerHealthBar").GetComponent<Image>();
         currentHealth = maxHealth;
     }
     void Start()
@@ -133,6 +135,7 @@ public class PlayerActionController : MonoBehaviour
                 anim.SetTrigger("BlockShaking");
                 anim.SetBool("IsBlockShaking", true);
                 rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX / 2 : -knockBackX / 2, knockBackY / 2), ForceMode2D.Force);
+                soundController.PlaySound("Block");
             }
             if (!isBlocking || (isBlocking && facingRight == isEnemyFacingRight))
             {
@@ -140,6 +143,7 @@ public class PlayerActionController : MonoBehaviour
                 healthBar.fillAmount = (float)currentHealth / maxHealth;
                 anim.SetTrigger("GetHit");
                 rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX : -knockBackX, knockBackY), ForceMode2D.Force);
+                soundController.PlaySound("GetHit");
             }
             if (currentHealth <= 0)
             {

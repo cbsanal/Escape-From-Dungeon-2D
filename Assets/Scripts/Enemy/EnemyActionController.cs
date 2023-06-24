@@ -1,22 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyActionController : MonoBehaviour
 {
     Animator anim;
     Rigidbody2D rb;
-    public int health, damage, movementSpeed;
+    [SerializeField] int currentHealth, maxHealth = 100, damage, knockBackX, knockBackY;
+    [SerializeField] float movementSpeed;
     bool facingRight = false;
+    int direction = -1;
     [SerializeField] bool isWalking = false, isWalkingAnimationPlaying = false;
     Transform player;
-    [SerializeField] int knockBackX, knockBackY;
+    Image healthBar;
 
     void Awake()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindWithTag("Player").GetComponent<Transform>();
+        healthBar = GameObject.FindWithTag("EnemyHealthBar").GetComponent<Image>();
+        currentHealth = maxHealth;
     }
     void Start()
     {
@@ -34,10 +39,11 @@ public class EnemyActionController : MonoBehaviour
     }
     public void GetHit(int damageValue, bool isEnemyFacingRight)
     {
-        rb.AddForce(new Vector2(isEnemyFacingRight ? knockBackX : -knockBackX, knockBackY), ForceMode2D.Force);
-        health -= damageValue;
+        rb.AddForce(new Vector2(0, knockBackY), ForceMode2D.Force);
+        currentHealth -= damageValue;
+        healthBar.fillAmount = (float)currentHealth / maxHealth;
         anim.SetTrigger("GetHit");
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
             anim.SetTrigger("Dead");
             rb.bodyType = RigidbodyType2D.Static;
@@ -49,6 +55,7 @@ public class EnemyActionController : MonoBehaviour
         if ((!facingRight && player.transform.position.x > transform.position.x) || (facingRight && player.transform.position.x < transform.position.x))
         {
             facingRight = !facingRight;
+            direction = -direction;
             Vector3 currentScale = transform.localScale;
             currentScale.x *= -1;
             transform.localScale = currentScale;
@@ -63,21 +70,22 @@ public class EnemyActionController : MonoBehaviour
                 anim.SetBool("IsWalking", true);
                 isWalkingAnimationPlaying = true;
             }
-            rb.velocity = new Vector2(facingRight ? movementSpeed : -movementSpeed, transform.position.y);
+            rb.AddForce((new Vector2(facingRight ? movementSpeed : -movementSpeed, 0) - rb.velocity), ForceMode2D.Impulse);
+            // rb.velocity = new Vector2(facingRight ? movementSpeed : -movementSpeed, transform.position.y);
         }
         if (!isWalking && isWalkingAnimationPlaying)
         {
-            StopWalking();
+            isWalkingAnimationPlaying = false;
         }
     }
-
     void DetectPlayer()
     {
         if (isWalking && Mathf.Abs(player.transform.position.x - transform.position.x) < 2)
         {
             StopWalking();
+            Attack();
         }
-        else if (!isWalking)
+        else if (!isWalking && Mathf.Abs(player.transform.position.x - transform.position.x) > 2)
         {
             isWalking = true;
         }
@@ -87,12 +95,10 @@ public class EnemyActionController : MonoBehaviour
         isWalking = false;
         isWalkingAnimationPlaying = false;
         anim.SetBool("IsWalking", false);
-        rb.velocity = new Vector2(0, transform.position.y);
+        rb.velocity = Vector2.zero;
     }
-
-
     void Attack()
     {
-        // anim.SetTrigger("Attack1");
+        anim.SetTrigger("Attack1");
     }
 }
