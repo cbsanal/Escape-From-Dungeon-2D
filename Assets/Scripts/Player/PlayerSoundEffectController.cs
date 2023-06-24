@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerSoundEffectController : MonoBehaviour
 {
-    [SerializeField] AudioSource attack1Source, attack2Source, attack3Source, blockSource, getHit;
+    [SerializeField] AudioSource attack1Source, attack2Source, attack3Source, blockSource, getHit, heal;
     public void PlaySound(string animationName)
     {
         switch (animationName)
@@ -23,6 +23,9 @@ public class PlayerSoundEffectController : MonoBehaviour
                 break;
             case "GetHit":
                 getHit.Play();
+                break;
+            case "Heal":
+                heal.Play();
                 break;
             default:
                 break;

@@ -46,8 +46,7 @@ public class EnemyActionController : MonoBehaviour
         if (currentHealth <= 0)
         {
             anim.SetTrigger("Dead");
-            rb.bodyType = RigidbodyType2D.Static;
-            Destroy(GetComponent<BoxCollider2D>());
+            GetComponent<EnemyActionController>().enabled = false;
         }
     }
     void Flip()

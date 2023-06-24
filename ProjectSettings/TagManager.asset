@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - PlayerHealthBar
   - EnemyHealthBar
+  - HealthPosion
   layers:
   - Default
   - TransparentFX

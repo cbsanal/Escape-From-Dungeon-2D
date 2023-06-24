@@ -8,7 +8,8 @@ public class PlayerActionController : MonoBehaviour
     float direction;
     bool facingRight = true, isRunning = false;
     bool isRolling = false, isRollingAnimationPlaying = false, isBlocking = false;
-    int latestAttackType = 3, currentHealth, maxHealth = 100; // latestAttackType = 3 so that attack1 will be triggered first
+    int latestAttackType = 3;
+    public int currentHealth, maxHealth = 100; // latestAttackType = 3 so that attack1 will be triggered first
     Rigidbody2D rb;
     Animator anim;
     GameObject[] enemies;
@@ -69,7 +70,8 @@ public class PlayerActionController : MonoBehaviour
 
             if (isRunning)
             {
-                rb.velocity = new Vector2(direction * movementSpeed, rb.velocity.y);
+                // rb.velocity = new Vector2(direction * movementSpeed, rb.velocity.y);
+                rb.AddForce((new Vector2(direction * movementSpeed, 0) - rb.velocity), ForceMode2D.Impulse);
             }
             if (!isRunning && (direction > 0 || direction < 0))
             {
@@ -78,7 +80,7 @@ public class PlayerActionController : MonoBehaviour
             }
             else if (isRunning && direction == 0)
             {
-                rb.velocity = new Vector2(direction, rb.velocity.y);
+                rb.velocity = Vector2.zero;
                 isRunning = false;
                 anim.SetBool("IsRunning", isRunning);
             }
@@ -172,6 +174,18 @@ public class PlayerActionController : MonoBehaviour
         FreezePlayer();
         isRollingAnimationPlaying = false;
         isRolling = false;
+    }
+    public void TakeHealthPosion(int healAmouth)
+    {
+        if (currentHealth + healAmouth > 100)
+        {
+            currentHealth = 100;
+        }
+        else
+        {
+            currentHealth += healAmouth;
+        }
+        healthBar.fillAmount = currentHealth / maxHealth;
     }
     void FreezePlayer()
     {

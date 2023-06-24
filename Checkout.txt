@@ -1,0 +1,7 @@
+Awake, Start, Update, FixedUpdate vb. farkları neler?
+AddForce, Changing Velocity, AddRelativeForce, MovePosition farkları neler?
+Birden fazla sprite'ın pivot noktasını nasıl değiştiririz?
+Cinemachine camera biraz daha incelenmeli, ekstra ne gibi özellikleri var?
+MovementBahavior, AttackBehavior, BlockBehaviour gibi farklı class'lar mı oluşturuluyor?
+Animasyon logici için detaylı bir kaynak?
+Web tarafında network'u yavaşlattığımız gibi, unity'de cpu hızını yavaşlatıp performans testi olayı var mı?
