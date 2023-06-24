@@ -120,7 +120,8 @@ public class PlayerActionController : MonoBehaviour
     {
         if (isRolling)
         {
-            rb.velocity = new Vector2(facingRight ? movementSpeed : -movementSpeed, rb.velocity.y);
+            // rb.velocity = new Vector2(facingRight ? movementSpeed : -movementSpeed, rb.velocity.y);
+            rb.AddForce((new Vector2(facingRight ? movementSpeed : -movementSpeed, 0) - rb.velocity), ForceMode2D.Impulse);
         }
         if (isRolling && !isRollingAnimationPlaying)
         {
