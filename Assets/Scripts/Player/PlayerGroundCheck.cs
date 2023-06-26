@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class PlayerGroundCheck : MonoBehaviour
 {
-    PlayerActionController player;
-    // Start is called before the first frame update
-    void Awake()
-    {
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerActionController>();
-    }
+    [SerializeField] PlayerActionController player;
+    [SerializeField] Animator anim;
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Ground"))
         {
+            if (anim.GetBool("IsFalling"))
+            {
+                anim.SetBool("IsFalling", false);
+            }
             player.isPlayerOnTheGround = true;
         }
     }
@@ -24,4 +25,5 @@ public class PlayerGroundCheck : MonoBehaviour
             player.isPlayerOnTheGround = false;
         }
     }
+
 }

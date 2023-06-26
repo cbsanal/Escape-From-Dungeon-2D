@@ -8,9 +8,9 @@ public class PlayerActionController : MonoBehaviour
     float direction;
     bool facingRight = true, isRunning = false;
     bool isRolling = false, isRollingAnimationPlaying = false, isBlocking = false, isJumping = false;
-    int latestAttackType = 3;
+    int latestAttackType = 3; // latestAttackType = 3 so that attack1 will be triggered first
     public bool isPlayerOnTheGround = true;
-    public int currentHealth, maxHealth = 100, jumpForce; // latestAttackType = 3 so that attack1 will be triggered first
+    public int currentHealth, maxHealth = 100, jumpForce;
     Rigidbody2D rb;
     Animator anim;
     GameObject[] enemies;
@@ -68,6 +68,7 @@ public class PlayerActionController : MonoBehaviour
         Run();
         Roll();
         Jump();
+        Fall();
     }
     void Run()
     {
@@ -200,10 +201,20 @@ public class PlayerActionController : MonoBehaviour
         {
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
             isJumping = false;
+            anim.SetBool("IsGoingUp", true);
+        }
+    }
+    void Fall()
+    {
+        if (rb.velocity.y <= 0 && !isPlayerOnTheGround)
+        {
+            anim.SetBool("IsGoingUp", false);
+            anim.SetBool("IsFalling", true);
         }
     }
     void FreezePlayer()
     {
         rb.velocity = new Vector2(0, rb.velocity.y);
     }
+
 }
