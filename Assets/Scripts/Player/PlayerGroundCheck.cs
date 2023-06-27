@@ -16,6 +16,7 @@ public class PlayerGroundCheck : MonoBehaviour
                 anim.SetBool("IsFalling", false);
             }
             player.isPlayerOnTheGround = true;
+            anim.SetBool("IsPlayerOnTheGround", true);
         }
     }
     void OnTriggerExit2D(Collider2D other)
@@ -23,7 +24,7 @@ public class PlayerGroundCheck : MonoBehaviour
         if (other.CompareTag("Ground"))
         {
             player.isPlayerOnTheGround = false;
+            anim.SetBool("IsPlayerOnTheGround", false);
         }
     }
-
 }

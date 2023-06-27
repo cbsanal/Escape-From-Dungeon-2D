@@ -60,21 +60,22 @@ public class PlayerActionController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            isJumping = true;
+            if (isPlayerOnTheGround)
+            {
+                isJumping = true;
+            }
         }
     }
     void FixedUpdate()
     {
         Run();
         Roll();
-        Jump();
-        Fall();
+        VerticalMovement();
     }
     void Run()
     {
         if (!isBlocking)
         {
-
             if (isRunning)
             {
                 // rb.velocity = new Vector2(direction * movementSpeed, rb.velocity.y);
@@ -87,11 +88,11 @@ public class PlayerActionController : MonoBehaviour
             }
             else if (isRunning && direction == 0)
             {
-                rb.velocity = Vector2.zero;
                 isRunning = false;
                 anim.SetBool("IsRunning", isRunning);
             }
         }
+
     }
     void Flip()
     {
@@ -162,7 +163,6 @@ public class PlayerActionController : MonoBehaviour
                 Destroy(GetComponent<BoxCollider2D>());
                 GetComponent<PlayerActionController>().enabled = false;
             }
-
         }
     }
     void Block()
@@ -195,21 +195,16 @@ public class PlayerActionController : MonoBehaviour
         }
         healthBar.fillAmount = currentHealth / maxHealth;
     }
-    void Jump()
+    void VerticalMovement()
     {
         if (isJumping && isPlayerOnTheGround)
         {
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
             isJumping = false;
-            anim.SetBool("IsGoingUp", true);
         }
-    }
-    void Fall()
-    {
-        if (rb.velocity.y <= 0 && !isPlayerOnTheGround)
+        if (!isJumping && !isPlayerOnTheGround)
         {
-            anim.SetBool("IsGoingUp", false);
-            anim.SetBool("IsFalling", true);
+            anim.SetFloat("VelocityY", rb.velocity.y);
         }
     }
     void FreezePlayer()
